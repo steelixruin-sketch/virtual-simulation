@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>模拟保护色的形成</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+    <h1>模拟保护色的形成过程</h1>
+
+    <div id="top-controls-layout">
+
+        <div id="instruction-guide" class="area-box">
+            <h3>操作指引</h3>
+            <ol>
+                <li>选择本轮生物变异色并输入数量；</li>
+                <li>选取自然环境颜色；</li>
+                <li>点击“手动淘汰”或“自动淘汰”按钮；</li>
+                <li>模拟捕食过程（捕食者捕食猎物）；</li>
+                <li>点击“结束本轮淘汰”，下方将显示统计表。</li>
+            </ol>
+        </div>
+
+        <div id="config-area" class="area-box">
+            <p style="font-weight: bold;">请设置初始种群中各变异色的数量 (总数应为 80)</p>
+            <div id="color-palette"></div>
+            <p style="margin-top: 10px;">当前种群总数: <span id="current-initial-pop-count" style="color: red; font-weight: bold;">0 / 80</span></p>
+        </div>
+
+        <div id="env-settings" class="area-box">
+            <label for="envColor">自然环境的颜色:</label>
+            <input type="color" id="envColor" value="#38761d" onchange="updateEnvironmentColor()">
+            
+            <hr style="margin: 10px 0;">
+
+            <label for="autoSpeedSelect">自动淘汰间隔 (毫秒):</label>
+            <select id="autoSpeedSelect" style="display: block; margin: 5px auto 10px;">
+                <option value="50">50ms</option>
+                <option value="100">100ms</option>
+                <option value="200">200ms</option>
+                <option value="300">300ms</option>
+                <option value="500" selected>500ms</option>
+                <option value="1000">1s</option>
+                <option value="2000">2s</option>
+            </select>
+
+            <hr style="margin: 10px 0;">
+            
+            <div style="text-align: left; padding-left: 10px; margin-bottom: 5px;">
+                <label style="font-weight: bold; cursor: pointer; display: flex; align-items: center;">
+                    <input type="checkbox" id="toggleAdvanced" style="margin-right: 5px;">
+                    <span>显示高级选项</span>
+                </label>
+            </div>
+
+            <div id="advancedOptionsContainer" style="display: none; text-align: left; padding-left: 20px; border-left: 2px solid #eee; margin-left: 5px;">
+    
+				<label style="font-weight: normal; font-size: 0.9em; cursor: pointer; display: block; margin-bottom: 5px;">
+					<input type="checkbox" id="allowCrossMutation" style="margin-right: 5px; vertical-align: middle;">
+					<span style="vertical-align: middle;">允许跨色系突变</span>
+				</label>
+
+				<div style="font-size: 0.8em; color: #666; line-height: 1.5; background-color: #f9f9f9; padding: 5px; border-radius: 4px;">
+					<strong>色系分组说明：</strong><br>
+					1组 (红/粉): 1 ~ 7<br>
+					2组 (橙/黄/绿): 8 ~ 21<br>
+					3组 (蓝/浅蓝): 22 ~ 28<br>
+					4组 (灰/白): 29 ~ 35
+				</div>
+				
+				<label style="font-weight: normal; font-size: 0.9em; cursor: pointer; display: block; margin-bottom: 5px;">
+					<input type="checkbox" id="reshufflePositions" checked style="margin-right: 5px; vertical-align: middle;">
+					<span style="vertical-align: middle;">捕获后惊扰 (重置位置)</span>
+				</label>
+
+				<label style="font-weight: normal; font-size: 0.9em; cursor: pointer; display: block; margin-bottom: 8px;">
+					<input type="checkbox" id="showCaptureAnimation" checked style="margin-right: 5px; vertical-align: middle;">
+					<span style="vertical-align: middle;">显示捕获特效动画</span>
+				</label>
+			</div>
+        </div>
+    </div>
+    
+    <div id="simulation-core-container">
+        
+        <div class="status-bar area-box">
+            <p>当前剩余个体总数: <span id="currentPopulation">80</span> 个</p>
+        </div>
+
+        <div id="operation-buttons-top">
+            
+            <div id="mode-selection" style="display: inline-block;">
+                <p>请选择淘汰方式：</p>
+                <button id="selectManual" class="mode-btn">手动淘汰</button>
+                <button id="selectAuto" class="mode-btn">自动淘汰</button>
+            </div>
+
+            <div id="action-buttons" style="display: none; margin-left: 20px;">
+                <button id="endElimination" style="display: none;">结束本轮淘汰</button>
+                <button id="clearStats">清除统计记录表</button>
+                <button id="resetAll">全部重置</button>
+            </div>
+        </div>
+        
+        <div id="simulation-area" class="area-box">
+            </div>
+
+    </div>
+
+    <div id="data-analysis-layout">
+        
+        <div id="stats-table-container" class="area-box">
+            </div>
+
+        <div class="chart-container area-box">
+            <canvas id="survivalChart"></canvas>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
